@@ -187,9 +187,6 @@ extern void pdsp_dp_terminal_task(pdsp_dp_t *ps_data)
     int scan_value = 0;
     printf(">");
     scanf("%c", &c_current);
-#ifdef __MINGW64__
-    getchar(); /* Purge stupid \n from windows line ending (Enter key). */
-#endif
     if (c_current == 'c')
     {
         printf("p1_ton_us  = ");
