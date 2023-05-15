@@ -1,8 +1,8 @@
-/** @file pdsp_dp.c
+/** @file pdsp_dp_cfg.h
  *
  * @author Falk Kyburz
- * @brief Double pulse generation module.
- *
+ * @brief Double pulse generation module configuration file.
+
  * @copyright
  * This is free and unencumbered software released into the public domain.
  *
@@ -30,26 +30,37 @@
  * For more information, please refer to <https://unlicense.org>
  */
 
-#include "pdsp_dp.h"
-#include <stdio.h>
+#ifndef PDSP_DP_CFG_H
+#define PDSP_DP_CFG_H
 
-int main(void)
-{
-    pdsp_dp_t pdsp_dp;
-    pdsp_dp_t *p_pdsp_dp = &pdsp_dp;
+/*==============================================================================
+ INCLUDE FILES
+ =============================================================================*/
 
-    pdsp_dp_init(p_pdsp_dp);
-    pdsp_dp_task(p_pdsp_dp);
-    pdsp_dp_trig(p_pdsp_dp);
-    pdsp_dp_task(p_pdsp_dp);
-    pdsp_dp_trig(p_pdsp_dp);
-    pdsp_dp_task(p_pdsp_dp);
+/* TODO: Include your HAL */
 
-#ifdef PDSP_DP_TERMINAL_ENABLED
-    while (1)
-    {
-        pdsp_dp_terminal_task(p_pdsp_dp);
-        pdsp_dp_task(p_pdsp_dp);
-    }
-#endif
-}
+/*==============================================================================
+ CONFIGURATION
+ =============================================================================*/
+/** Enable serial communication. Uncomment to enable control from a terminal
+ * (serial) interface.
+ */
+#define PDSP_DP_TERMINAL_ENABLED
+
+/** Set terminal to verbose mode. */
+// #define PDSP_DP_TERMINAL_VERBOSE
+/** Pin set function. Must be direct register access for performance.
+ * Uncomment if there is no hardware available. */
+// #define PDSP_DP_CONFIG_SET_PIN()
+
+/** Pin clear function. Must be direct register access for performance.
+ * Uncomment if there is no hardware available. */
+// #define PDSP_DP_CONFIG_CLEAR_PIN()
+
+#define PDSP_DP_DEFAULT_CALIB_LOOPS 100
+#define PDSP_DP_DEFAULT_P1_TON_US 10
+#define PDSP_DP_DEFAULT_P1_TOFF_US 10
+#define PDSP_DP_DEFAULT_P2_TON_US 10
+#define PDSP_DP_DEFAULT_P2_TOFF_US 1000000
+
+#endif /* PDSP_DP_CFG_H */

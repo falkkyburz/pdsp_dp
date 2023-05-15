@@ -82,16 +82,14 @@ const char *s_header =
  PUBLIC FUNCTIONS
  =============================================================================*/
 
-extern void pdsp_dp_init(pdsp_dp_t *ps_data, int32_t i32_delay_us_calib_static,
-                         int32_t i32_delay_us_calib_loops)
+extern void pdsp_dp_init(pdsp_dp_t *ps_data)
 {
-    ps_data->i32_delay_us_calib_static = i32_delay_us_calib_static;
-    ps_data->i32_delay_us_calib_loops = i32_delay_us_calib_loops;
+    ps_data->i32_delay_us_calib_loops = PDSP_DP_DEFAULT_CALIB_LOOPS;
     ps_data->i32_p1_ton_us = PDSP_DP_DEFAULT_P1_TON_US;
     ps_data->i32_p1_toff_us = PDSP_DP_DEFAULT_P1_TOFF_US;
     ps_data->i32_p2_ton_us = PDSP_DP_DEFAULT_P2_TON_US;
     ps_data->i32_p2_toff_us = PDSP_DP_DEFAULT_P2_TOFF_US;
-    ps_data->u8_trig = 0;
+    ps_data->u32_trig = 0;
 #ifdef PDSP_DP_TERMINAL_ENABLED
     printf("%s\n", s_header);
 #endif
@@ -106,51 +104,22 @@ extern void pdsp_dp_task(pdsp_dp_t *ps_data)
     int32_t i32_count = 0;
 
     /* Run pulse generation*/
-    if (ps_data->u8_trig)
+    if (ps_data->u32_trig)
     {
-        ps_data->u8_trig = 0;
+        ps_data->u32_trig = 0;
         /* Calculate counts for p1 */
-        if ((ps_data->i32_p1_ton_us - ps_data->i32_delay_us_calib_static) > 0)
-        {
-            i32_count_p1_ton =
-                (ps_data->i32_p1_ton_us - ps_data->i32_delay_us_calib_static) *
-                ps_data->i32_delay_us_calib_loops;
-        }
-        else
-        {
-            i32_count_p1_ton = 0;
-        }
-        if ((ps_data->i32_p1_toff_us - ps_data->i32_delay_us_calib_static) > 0)
-        {
-            i32_count_p1_toff =
-                (ps_data->i32_p1_toff_us - ps_data->i32_delay_us_calib_static) *
-                ps_data->i32_delay_us_calib_loops;
-        }
-        else
-        {
-            i32_count_p1_toff = 0;
-        }
-        /* Calculate counts for p2 */
-        if ((ps_data->i32_p2_ton_us - ps_data->i32_delay_us_calib_static) > 0)
-        {
-            i32_count_p2_ton =
-                (ps_data->i32_p2_ton_us - ps_data->i32_delay_us_calib_static) *
-                ps_data->i32_delay_us_calib_loops;
-        }
-        else
-        {
-            i32_count_p2_ton = 0;
-        }
-        if ((ps_data->i32_p2_toff_us - ps_data->i32_delay_us_calib_static) > 0)
-        {
-            i32_count_p2_toff =
-                (ps_data->i32_p2_toff_us - ps_data->i32_delay_us_calib_static) *
-                ps_data->i32_delay_us_calib_loops;
-        }
-        else
-        {
-            i32_count_p2_toff = 0;
-        }
+
+        i32_count_p1_ton =
+            ps_data->i32_p1_ton_us * ps_data->i32_delay_us_calib_loops;
+
+        i32_count_p1_toff =
+            ps_data->i32_p1_toff_us * ps_data->i32_delay_us_calib_loops;
+
+        i32_count_p2_ton =
+            ps_data->i32_p2_ton_us * ps_data->i32_delay_us_calib_loops;
+
+        i32_count_p2_toff =
+            ps_data->i32_p2_toff_us * ps_data->i32_delay_us_calib_loops;
 
 #ifdef PDSP_DP_TERMINAL_ENABLED
 #ifdef PDSP_DP_TERMINAL_VERBOSE
@@ -208,7 +177,7 @@ extern void pdsp_dp_set_p2_toff_us(pdsp_dp_t *ps_data, int32_t i32_p2_toff_us)
     ps_data->i32_p2_toff_us = i32_p2_toff_us;
 }
 
-extern void pdsp_dp_trig(pdsp_dp_t *ps_data) { ps_data->u8_trig = 1; }
+extern void pdsp_dp_trig(pdsp_dp_t *ps_data) { ps_data->u32_trig = 1; }
 
 #ifdef PDSP_DP_TERMINAL_ENABLED
 extern void pdsp_dp_terminal_task(pdsp_dp_t *ps_data)
