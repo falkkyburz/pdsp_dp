@@ -35,6 +35,7 @@
  =============================================================================*/
 #include "pdsp_dp.h"
 #include <stdint.h>
+#include <stdlib.h>
 
 #ifdef PDSP_DP_TERMINAL_ENABLED
 #include <stdio.h>
@@ -68,10 +69,12 @@ const char *s_header =
     "  |                    |           |           |\n"
     "  |         p1         |           |    p2     |\n"
     "  |                    |           |           |\n"
-    "--|--------------------|--------- -|-----------|-----------|--> t [us]\n"
+    "--|--------------------|--------- -|-----------|-----------|--> t "
+    "[us]\n"
     "   <-------p1_ton-----> <-p1_toff-> <--p1_ton-> <-p1_toff->\n"
     "Press 'h' then 'Enter' to configure pulse timing.\n"
     "Press 'c' then 'Enter' to configure pulse timing.\n"
+    "Press 'q' then 'Enter' when running on PC to quit.\n"
     "Press 'space' then 'Enter' to trigger double pulse.";
 #endif
 
@@ -215,6 +218,9 @@ extern void pdsp_dp_terminal_task(pdsp_dp_t *ps_data)
     int scan_value = 0;
     printf(">");
     scanf("%c", &c_current);
+#ifdef __MINGW64__
+    getchar(); /* Purge stupid \n from windows line ending (Enter key). */
+#endif
     if (c_current == 'c')
     {
         printf("p1_ton_us  = ");
@@ -284,6 +290,12 @@ extern void pdsp_dp_terminal_task(pdsp_dp_t *ps_data)
         printf("p2_ton_us  = %i\n", ps_data->i32_p2_ton_us);
         printf("p2_toff_us = %i\n", ps_data->i32_p2_toff_us);
     }
+#ifdef __MINGW64__
+    if (c_current == 'q')
+    {
+        exit(0);
+    }
+#endif
     if (c_current == ' ')
     {
         printf("Triggered!\n");

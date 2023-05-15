@@ -56,18 +56,18 @@
 #define PDSP_DP_TERMINAL_ENABLED
 
 /** Set terminal to verbose mode. */
-#define PDSP_DP_TERMINAL_VERBOSE
-/** Pin set function. Must be direct register access for performance. Uncomment
- * if there is no hardware available. */
+// #define PDSP_DP_TERMINAL_VERBOSE
+/** Pin set function. Must be direct register access for performance.
+ * Uncomment if there is no hardware available. */
 // #define PDSP_DP_CONFIG_SET_PIN()
 
 /** Pin clear function. Must be direct register access for performance.
  * Uncomment if there is no hardware available. */
 // #define PDSP_DP_CONFIG_CLEAR_PIN()
 
-#define PDSP_DP_DEFAULT_P1_TON_US 1000
+#define PDSP_DP_DEFAULT_P1_TON_US 900
 #define PDSP_DP_DEFAULT_P1_TOFF_US 1000
-#define PDSP_DP_DEFAULT_P2_TON_US 1000
+#define PDSP_DP_DEFAULT_P2_TON_US 1100
 #define PDSP_DP_DEFAULT_P2_TOFF_US 1000000
 
 /*==============================================================================
@@ -110,8 +110,8 @@ extern void pdsp_dp_init(pdsp_dp_t *ps_data, int32_t i32_delay_us_calib_static,
 
 /**
  * @brief Task the double pulse module to be called periodically.
- * @details Blocks until pulse if finished if triggered. I the trigger input is
- * constantly true, it results in a continuous double pulse waveform. For
+ * @details Blocks until pulse if finished if triggered. I the trigger input
+ * is constantly true, it results in a continuous double pulse waveform. For
  * terminal control, set trigger to false.
  * @param ps_data Pointer to double pulse data struct.
  * @param u8_trigger Trigger input (non-retriggerable).
